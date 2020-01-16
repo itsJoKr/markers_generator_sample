@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-
 import 'dart:typed_data';
-
+import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
 
 /// This just adds overlay and builds [_MarkerHelper] on that overlay.
@@ -35,18 +33,16 @@ class MarkerGenerator {
         maintainState: true);
 
     overlayState.insert(entry);
-    // Need to rearrange to insert below current screen, not sure how else to do it
-    overlayState.rearrange([entry], above: entry);
   }
 }
 
-/// Maps deep below are using native GoogleMap library for Andorid/iOS and embeding it into flutter.
+/// Maps are embeding GoogleMap library for Andorid/iOS  into flutter.
 ///
-/// These native shitty libraries accept BitmapDescriptor for marker, which means for custom markers
+/// These native libraries accept BitmapDescriptor for marker, which means that for custom markers
 /// you need to draw view to bitmap and then send that to BitmapDescriptor.
 ///
 /// Because of that Flutter also cannot accept Widget for marker, but you need draw it to bitmap and
-/// that's what this thing does:
+/// that's what this widget does:
 ///
 /// 1) It draws marker widget to tree
 /// 2) After painted access the repaint boundary with global key and converts it to uInt8List
@@ -74,15 +70,21 @@ class _MarkerHelperState extends State<_MarkerHelper> with AfterLayoutMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: widget.markerWidgets.map((i) {
-        final markerKey = GlobalKey();
-        globalKeys.add(markerKey);
-        return RepaintBoundary(
-          key: markerKey,
-          child: i,
-        );
-      }).toList(),
+    return Transform.translate(
+          offset: Offset(MediaQuery.of(context).size.width, 0),
+          child: Material(
+            type: MaterialType.transparency,
+            child: Stack(
+              children: widget.markerWidgets.map((i) {
+                final markerKey = GlobalKey();
+                globalKeys.add(markerKey);
+                return RepaintBoundary(
+                  key: markerKey,
+                  child: i,
+                );
+              }).toList(),
+            ),
+          ),
     );
   }
 

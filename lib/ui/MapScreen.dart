@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:map_marker_sample/lib/MarkerGenerator.dart';
+import 'package:map_marker_sample/gist/Gist.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -15,15 +15,15 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Stack(
-        children: <Widget>[
-          GoogleMap(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(45.811328, 15.975862), zoom: 8),
-            markers: markers.toSet(),
-          ),
-        ],
-      ),
+        child: Stack(
+          children: <Widget>[
+            GoogleMap(
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(45.811328, 15.975862), zoom: 8),
+              markers: markers.toSet(),
+            ),
+          ],
+        ),
     );
   }
 
@@ -60,7 +60,7 @@ Widget _getMarkerWidget(String name) {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.black, width: 1),
-        color: Colors.yellow,
+        color: Colors.white,
         shape: BoxShape.rectangle,
       ),
       child: Text(
