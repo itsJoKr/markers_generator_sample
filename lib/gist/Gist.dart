@@ -23,11 +23,18 @@ class MarkerGenerator {
   void addOverlay(BuildContext context) {
     OverlayState overlayState = Overlay.of(context);
 
-    OverlayEntry entry = OverlayEntry(
+    OverlayEntry entry;
+    entry = OverlayEntry(
         builder: (context) {
           return _MarkerHelper(
             markerWidgets: markerWidgets,
-            callback: callback,
+            callback: (List<Uint8List> bitmapList) {
+                // Given callback function
+                callback.call(bitmapList);
+                
+                // Remove marker widget stack from Overlay when finished
+                entry.remove();
+              },
           );
         },
         maintainState: true);
@@ -59,7 +66,7 @@ class _MarkerHelper extends StatefulWidget {
 }
 
 class _MarkerHelperState extends State<_MarkerHelper> with AfterLayoutMixin {
-  List<GlobalKey> globalKeys = List<GlobalKey>();
+  List<GlobalKey> globalKeys = [];
 
   @override
   void afterFirstLayout(BuildContext context) {
